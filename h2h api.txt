@@ -1,0 +1,18 @@
+import requests
+
+API_KEY = "bce8c3b7b013150ddece1f6444b326b6"
+
+params = {
+    'apiKey': API_KEY,
+    'daysFrom': 1,  # Optional, adjust as needed
+    'dateFormat': 'iso',  # Optional, adjust as needed
+    'eventIds': 'comma,separated,game,ids',  # Optional, adjust as needed
+}
+
+response = requests.get('https://api.the-odds-api.com/v4/sports', params=params)
+
+if response.status_code == 200:
+    sports_data = response.json()
+    print(sports_data)
+else:
+    print(f"Failed to retrieve sports data. Status code: {response.status_code}")
