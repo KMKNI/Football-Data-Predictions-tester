@@ -325,7 +325,7 @@ workbook  = writer.book
 worksheet = writer.sheets['Sheet1']
 worksheet.set_column(2, 80, 5)
 worksheet.set_column(0, 1, 12)
-writer.save()
+writer.close()
 
 #Get the means
 for atr in newAtr:
@@ -349,7 +349,7 @@ workbook  = writer.book
 worksheet = writer.sheets['Sheet1']
 worksheet.set_column(2, 80, 5)
 worksheet.set_column(0, 1, 12)
-writer.save()
+writer.close()
 
 '''---------------------------------------------
 ---------PRINT DIFFERENT STADISTICS-------------
@@ -394,15 +394,20 @@ def printAllTables(data, teamList):
 ---------MAKING THE DIFFERENT MODELS------------
 ------------------------------------------------'''
 
-noReprGames = 91 # Number of no-representative games. First N games will be deleted
+noReprGames = 91 # Number of no-representative games. First N games will be deleted#kkkkkkkkkkkkkkkkk
 test_size = 0.06 # % of matches used to size the accuracy of the model
 
 # Function to delete the first games of the training files as they are not very representative
 def deleteHeadToTrain(data:DataFrame, rows:int):
-	data = data.drop(range(0,rows), axis=0) 
+	#rows_to_drop = min(rows, len(data))#kkkkkkkkkkkkkkkkkkkk
+	print("Number of rows to drop:", rows)#kkkkkkkkkkkkkkkkkk
+	print("Total rows in DataFrame:", len(data))#kkkkkkkkkkkkkkkk
+	data = data.drop(range(0,rows), axis=0) #kkkkkkkkkkkkkkkkk
 	for x in range(len(data.index)):
-		if data['HM'].values[x]<3 or data['P1'].values[x]<4 or data['AM'].values[x]<3 or data['P2'].values[x]<4:
-			data.drop(x, axis=0)	
+		if x < len(data['HM'].values) and (data['HM'].values[x]<3 or data['P1'].values[x]<4 or data['AM'].values[x]<3 or data['P2'].values[x]<4):
+			if x in data.index:
+				data.drop(x, axis=0, inplace=True)
+
 	return data
 
 # Function to generate a new row (a new match) at the end of the test file, to predict the user desire.
